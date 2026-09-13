@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Email Accounts - Bulk Email System{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Email Accounts</h1><p class="muted">Search, filter, upload and manage accounts in bulk.</p></div></div>
+<div class="grid-2 top-space">
+  <section class="panel"><div class="panel-head"><h2>Upload Email List</h2></div>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-box">
+      <input id="file" type="file" name="file" accept=".csv,.xlsx" required>
+      <label for="file" class="drop-label">📁 Choose or drop CSV / XLSX file</label>
+      <button class="btn primary" type="submit">Upload List</button>
+    </form>
+    <p class="hint">CSV/XLSX needs an <code>email</code> or <code>email_address</code> column. Optional: <code>account_type</code>.</p>
+  </section>
+  <section class="panel"><div class="panel-head"><h2>Domain Operation</h2></div>
+    <form action="{{ url_for('domain_action') }}" method="post" class="domain-form">
+      <input name="domain" placeholder="example.com" required>
+      <select name="action"><option value="BLOCK">Block domain</option><option value="UNBLOCK">Unblock domain</option></select>
+      <button class="btn danger" type="submit" onclick="return confirm('Apply this operation to every account in the domain?')">Apply</button>
+    </form>
+    <p class="hint">This changes every imported account matching the domain.</p>
+  </section>
+</div>
+<section class="panel top-space"><form method="get" class="filters">
+  <input name="search" value="{{ search }}" placeholder="Search email...">
+  <select name="domain"><option value="">All domains</option>{% for d in domains %}<option value="{{ d }}" {% if selected_domain==d %}selected{% endif %}>{{ d }}</option>{% endfor %}</select>
+  <select name="account_type"><option value="">All types</option>{% for t in types %}<option value="{{ t }}" {% if selected_type==t %}selected{% endif %}>{{ t }}</option>{% endfor %}</select>
+  <select name="status"><option value="">All status</option><option value="ACTIVE" {% if selected_status=="ACTIVE" %}selected{% endif %}>ACTIVE</option><option value="BLOCKED" {% if selected_status=="BLOCKED" %}selected{% endif %}>BLOCKED</option></select>
+  <button class="btn" type="submit">Filter</button><a class="btn ghost" href="{{ url_for('emails') }}">Reset</a>
+</form></section>
+<form action="{{ url_for('bulk_action') }}" method="post" id="bulkForm"><section class="panel top-space">
+  <div class="panel-head"><div><h2>Accounts</h2><span class="muted">{{ accounts|length }} result(s)</span></div><div class="actions">
+    <button class="btn danger" name="action" value="BLOCK" type="submit" onclick="return confirmSelected('block')">🚫 Block Selected</button>
+    <button class="btn success" name="action" value="UNBLOCK" type="submit" onclick="return confirmSelected('unblock')">🔓 Unblock Selected</button>
+  </div></div>
+  <div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="selectAll"></th><th>ID</th><th>Email</th><th>Domain</th><th>Type</th><th>Status</th><th>Created</th></tr></thead><tbody>
+  {% for account in accounts %}<tr><td><input class="row-check" type="checkbox" name="email_ids" value="{{ account.email_id }}"></td><td>{{ account.email_id }}</td><td><b>{{ account.email_address }}</b></td><td>{{ account.domain }}</td><td>{{ account.account_type }}</td><td><span class="badge {{ account.status|lower }}">{{ account.status }}</span></td><td>{{ account.created_at.strftime('%Y-%m-%d') }}</td></tr>
+  {% else %}<tr><td colspan="7" class="empty">No email accounts found.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section></form>
+{% endblock %}
