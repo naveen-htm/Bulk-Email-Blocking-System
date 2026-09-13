@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Logs - Bulk Email System{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Blocking / Unblocking Logs</h1><p class="muted">Historical audit trail for account changes.</p></div></div>
+<section class="panel top-space"><div class="table-wrap"><table><thead><tr><th>Log ID</th><th>Email</th><th>Action</th><th>Performed By</th><th>Date / Time</th></tr></thead><tbody>
+{% for log in logs %}<tr><td>{{ log.log_id }}</td><td>{{ log.email.email_address }}</td><td><span class="badge {{ log.action|lower }}">{{ log.action }}</span></td><td>{{ log.user.username }}</td><td>{{ log.action_time.strftime('%Y-%m-%d %H:%M:%S') }}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">No logs yet.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}
