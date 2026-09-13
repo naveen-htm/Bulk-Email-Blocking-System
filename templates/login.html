@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login - Bulk Email System{% endblock %}
+{% block content %}
+<div class="login-page">
+  <div class="login-card">
+    <div class="logo">✉</div>
+    <h1>Bulk Email Admin</h1>
+    <p class="muted">Secure administrator access</p>
+    <form method="post">
+      <label>Username</label>
+      <input name="username" required autofocus placeholder="Enter username">
+      <label>Password</label>
+      <input type="password" name="password" required placeholder="Enter password">
+      <button class="btn primary full" type="submit">Sign In</button>
+    </form>
+    <div class="demo">Demo: <b>admin</b> / <b>admin123</b></div>
+  </div>
+</div>
+{% endblock %}
