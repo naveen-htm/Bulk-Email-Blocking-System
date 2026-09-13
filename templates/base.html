@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Bulk Email System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% if session.get('user_id') %}
+<nav class="navbar">
+  <div class="brand">✉ Bulk Email Admin</div>
+  <div class="navlinks">
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('emails') }}">Email Accounts</a>
+    <a href="{{ url_for('logs') }}">Logs</a>
+    <a href="{{ url_for('reports') }}">Reports</a>
+    <span class="user-pill">{{ session.get('username') }} · {{ session.get('role') }}</span>
+    <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</nav>
+{% endif %}
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
