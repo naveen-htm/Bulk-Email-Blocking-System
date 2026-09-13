@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Reports - Bulk Email System{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Reports</h1><p class="muted">Bulk operation history and totals.</p></div></div>
+<div class="cards"><div class="stat-card"><span>Total Block Actions</span><strong>{{ block_count }}</strong></div><div class="stat-card"><span>Total Unblock Actions</span><strong>{{ unblock_count }}</strong></div></div>
+<section class="panel top-space"><div class="panel-head"><h2>Operation History</h2></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Operation</th><th>Total</th><th>Successful</th><th>Failed</th><th>Admin</th><th>Date / Time</th></tr></thead><tbody>
+{% for op in operations %}<tr><td>{{ op.operation_id }}</td><td><span class="badge {{ op.operation_type|lower }}">{{ op.operation_type }}</span></td><td>{{ op.total_accounts }}</td><td>{{ op.successful_accounts }}</td><td>{{ op.failed_accounts }}</td><td>{{ op.user.username }}</td><td>{{ op.operation_time.strftime('%Y-%m-%d %H:%M:%S') }}</td></tr>
+{% else %}<tr><td colspan="7" class="empty">No operation reports yet.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}
