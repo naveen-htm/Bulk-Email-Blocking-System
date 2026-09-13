@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Bulk Email System{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Dashboard</h1><p class="muted">Manage email accounts and bulk operations.</p></div><a class="btn primary" href="{{ url_for('emails') }}">Manage Accounts →</a></div>
+<div class="cards">
+  <div class="stat-card"><span>Total Accounts</span><strong>{{ total }}</strong><small>All imported accounts</small></div>
+  <div class="stat-card"><span>Active</span><strong>{{ active }}</strong><small>Currently available</small></div>
+  <div class="stat-card danger-card"><span>Blocked</span><strong>{{ blocked }}</strong><small>Currently blocked</small></div>
+</div>
+<div class="grid-2">
+  <section class="panel"><div class="panel-head"><h2>Quick Actions</h2></div><div class="quick-grid">
+    <a class="quick" href="{{ url_for('emails') }}">📧 <b>Email Accounts</b><span>Search and manage</span></a>
+    <a class="quick" href="{{ url_for('logs') }}">📝 <b>Action Logs</b><span>View history</span></a>
+    <a class="quick" href="{{ url_for('reports') }}">📊 <b>Reports</b><span>Operation summaries</span></a>
+  </div></section>
+  <section class="panel"><div class="panel-head"><h2>Recent Operations</h2></div>
+    {% if operations %}<table><thead><tr><th>Type</th><th>Total</th><th>Success</th><th>Failed</th></tr></thead><tbody>
+    {% for op in operations %}<tr><td><span class="badge {{ op.operation_type|lower }}">{{ op.operation_type }}</span></td><td>{{ op.total_accounts }}</td><td>{{ op.successful_accounts }}</td><td>{{ op.failed_accounts }}</td></tr>{% endfor %}
+    </tbody></table>{% else %}<div class="empty">No operations yet.</div>{% endif %}
+  </section>
+</div>
+{% endblock %}
